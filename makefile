@@ -5,9 +5,9 @@ define clean
     rm -f src/*.o
 endef
 
-myshell: src/myshell.c src/errors.o src/errors.h
+myshell: src/myshell.c src/errors.o src/errors.h src/commands.o src/commands.h
 	mkdir -p build
-	$(CC) $(CFLAGS) src/myshell.c src/errors.o -o build/myshell
+	$(CC) $(CFLAGS) src/myshell.c src/errors.o src/commands.o -o build/myshell
 
 clean:
 	rm -f src/*.o

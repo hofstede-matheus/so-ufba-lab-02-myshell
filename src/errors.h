@@ -2,5 +2,7 @@
 #define ERRORS_H
 
 void errorInvalidArgumentsNumber();
+void errorPermission();
+void errorMemory();
 
 #endif
