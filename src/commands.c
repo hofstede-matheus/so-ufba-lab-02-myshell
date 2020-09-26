@@ -30,17 +30,13 @@ void commandStart(char *argv[], int argc) {
             }
         }
     }
+    wait(0);
 }
 
 
 void commandWait() {
 
-    if((fork() == 0)) {
-        printf("child\n");
-        sleep(1);
-        kill(getpid(), SIGKILL);
-    } else {
-        printf("!!\n");
+    if((fork() != 0)) {
         int corpse;
         int status;
         int childrenCount = 0;
@@ -65,15 +61,4 @@ void commandWait() {
         }
         if (childrenCount == 0) printf("myshell: não há processos restantes.");
     }
-
-    /* if (fork() > 0) {
-        printf("!!");
-        while ((wpid = wait(0)) > 0) {
-            sprintf(mypid, "%d", wpid);
-            printf("%s\n", mypid);
-        }
-    } */
-
-
-
 }
