@@ -4,5 +4,6 @@
 void commandStart(char *argv[], int argc);
 void commandWait();
 void commandChdir(char *path);
+void commandWatchdog(char *argv[], int argc);
 
 #endif

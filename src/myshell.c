@@ -55,6 +55,8 @@ void invoke(char *command, char *argv[], int argc) {
         commandWait();
     } else if (strEquals(command, "chdir")) {
         commandChdir(argv[0]);
+    } else if (strEquals(command, "watchdog")) {
+        commandWatchdog(argv, argc);
     }
 
 }
