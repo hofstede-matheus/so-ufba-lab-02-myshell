@@ -3,5 +3,6 @@
 
 void commandStart(char *argv[], int argc);
 void commandWait();
+void commandChdir(char *path);
 
 #endif

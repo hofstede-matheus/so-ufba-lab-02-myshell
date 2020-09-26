@@ -53,6 +53,8 @@ void invoke(char *command, char *argv[], int argc) {
         commandStart(argv, argc);
     } else if (strEquals(command, "wait")) {
         commandWait();
+    } else if (strEquals(command, "chdir")) {
+        commandChdir(argv[0]);
     }
 
 }
@@ -69,23 +71,39 @@ int main(int argc, char **argv) {
     while (TRUE) {
         npalavras = 0;
         printf("myshell> ");
-        while (fgets(buffer, BUFFER_SIZE, stdin)) {
-            token = strtok(buffer, " \t\n");
+        fgets(buffer, BUFFER_SIZE, stdin);
 
-            command = token;
+        token = strtok(buffer, " \t\n");
 
+        command = token;
+
+        token = strtok(NULL, " \t\n");
+
+        while (token != NULL) {
+            // printf("'%s'\n", token);
+            palavras[npalavras] = token;
+            npalavras++;
             token = strtok(NULL, " \t\n");
-
-            while (token != NULL) {
-                // printf("'%s'\n", token);
-                palavras[npalavras] = token;
-                npalavras++;
-                token = strtok(NULL, " \t\n");
-            }
-            palavras[npalavras] = 0;
-
-            invoke(command, palavras, npalavras);
         }
+        palavras[npalavras] = 0;
+
+        // while( token != NULL ) {
+        //     token = strtok(NULL, delimiter);
+        //     // printf("%s:::%s\n", token, arguments);
+        //     printf("!!\n%s\n", concatString(arguments, token));
+        //     printf("!!\n%s\n", concatString(arguments, token));
+        //     /* strcat(arguments, token);
+        //     arguments = concatString(arguments, token); */
+
+        // }
+
+        // for (int i = 0; i < npalavras; i++) {
+        //     printf("%s \n", palavras[i]);
+        // }
+
+        invoke(command, palavras, npalavras);
+
     }
+
     return EXIT_SUCCESS;
 }

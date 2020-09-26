@@ -29,8 +29,9 @@ void commandStart(char *argv[], int argc) {
                     errorMemory();
             }
         }
+    } else {
+        wait(0);
     }
-    wait(0);
 }
 
 
@@ -61,4 +62,8 @@ void commandWait() {
         }
         if (childrenCount == 0) printf("myshell: não há processos restantes.");
     }
+}
+
+void commandChdir(char *path) {
+    chdir(path);    
 }
