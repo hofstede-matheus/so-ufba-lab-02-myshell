@@ -65,8 +65,49 @@ void commandWait() {
 }
 
 void commandChdir(char *path) {
-/*     chdir(path);
-    if(chdir(path) != 0){
+    chdir(path);
+}
 
-    } */
+void proc_exit(int signal) {
+    printf("%d::%dfui executado\n", signal, errno);
+}
+
+void commandWatchdog(char *argv[], int argc) {
+    int sleepTimeSeconds = atoi(argv[0]);
+    pid_t commandId;
+
+    char *args[argc - 1];
+
+    for (int i = 0; i < argc; i++) {
+        args[i] = argv[i + 1];
+    }
+    args[argc - 1] = NULL;
+
+    if ((commandId = fork()) == 0) {
+        if (execvp(args[0], args) == -1) {
+            switch (errno) {
+                case EACCES:
+                    errorPermission();
+                    break;
+                case ENOMEM:
+                    errorMemory();
+            }
+        }
+    } else {
+        printf("erno1:%d\n", errno);
+        signal (SIGCHLD, proc_exit);
+        if (sleep(sleepTimeSeconds) == 0) {
+            printf("myshell: finalizando processo 70, pois excedeu o tempo limite\n");
+            printf("vou matar\n");
+            kill(commandId, SIGKILL);
+            printf("matei%d\n", errno);
+        } else {
+
+        }
+    }
+
+
+    wait(0);
+
+
 }
