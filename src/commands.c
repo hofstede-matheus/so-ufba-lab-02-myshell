@@ -65,5 +65,8 @@ void commandWait() {
 }
 
 void commandChdir(char *path) {
-    chdir(path);    
+/*     chdir(path);
+    if(chdir(path) != 0){
+
+    } */
 }
