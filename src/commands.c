@@ -65,7 +65,19 @@ void commandWait() {
 }
 
 void commandChdir(char *path) {
-    chdir(path);
+    int cd = chdir(path);
+    if(cd<0){
+        printf("myshell: erro ao mudar diretorio\n");
+    }
+}
+
+void commandPwd(){
+    char cwd[256];
+    if (getcwd(cwd, sizeof(cwd)) == NULL){
+        perror("myshell: getcwd() error\n");
+    } else{
+        printf("%s\n", cwd);
+    }
 }
 
 void proc_exit(int signal) {
@@ -106,8 +118,17 @@ void commandWatchdog(char *argv[], int argc) {
         }
     }
 
-
     wait(0);
 
+}
+
+void commandRun(char *argv[], int argc){
+    /* Combina comportamento do start e wait
+        Deve iniciar um programa, 
+        esperar que tal processo termine
+        imprimir status do termino */
+
+    commandStart(argv[1], argc);
+    commandWait();
 
 }

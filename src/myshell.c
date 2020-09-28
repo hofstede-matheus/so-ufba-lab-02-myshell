@@ -54,15 +54,20 @@ void invoke(char *command, char *argv[], int argc) {
         commandWait();
     } else if (strEquals(command, "chdir")) {
         commandChdir(argv[0]);
+    } else if(strEquals(command, "pwd")){
+        commandPwd();
+    } else if (strEquals(command, "run")){
+        commandRun(argv, argc);   
     } else if (strEquals(command, "watchdog")) {
         commandWatchdog(argv, argc);
     } else if (strEquals(command, "exit") || strEquals(command, "quit")){
         /* Se comando for exit/quit, encerrar com status 0 */
         exit(0);
     } else{
-        /* Se o comando não for reconhecido, imprimir uma mensagem */
+        // Se o comando não for reconhecido, imprimir uma mensagem 
         printf("myshell: Comando desconhecido: %s\n", command);
-    } 
+    }  
+   
 
 }
 
