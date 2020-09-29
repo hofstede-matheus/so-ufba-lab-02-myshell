@@ -52,6 +52,8 @@ void invoke(char *command, char *argv[], int argc) {
         commandStart(argv, argc);
     } else if (strEquals(command, "wait")) {
         commandWait();
+    } else if(strEquals(command, "waitfor")){
+        commandWaitFor(argv);
     } else if (strEquals(command, "chdir")) {
         commandChdir(argv[0]);
     } else if(strEquals(command, "pwd")){
@@ -84,6 +86,14 @@ int main(int argc, char **argv) {
         npalavras = 0;
         printf("myshell> ");
         fgets(buffer, BUFFER_SIZE, stdin);
+        //printf("%s", buffer);
+
+        /* Esse trecho foi incluido para permitir leitura de linhas em branco
+        Ou seja, se o user aperta enter, passa pra proxima entrada sem sair
+        do programa shell. */
+        if (buffer[npalavras] == EOF || buffer[npalavras] == '\n') {
+            continue;
+        }
 
         token = strtok(buffer, " \t\n");
 
