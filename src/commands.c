@@ -28,74 +28,78 @@ void commandStart(char *argv[], int argc) {
                     break;
                 case ENOMEM:
                     errorMemory();
+                    break;
+                case ENOENT:
+                    errorNotSuchExecutable();
+                    break;
             }
         }
     } else {
-        wait(0);
         printf("myshell: processo %d iniciado.\n", commandId);
+        wait(0);
     }
 }
 
 
 void commandWait() {
     pid_t pid;
-    //int status;
 
-    if((pid = fork()) != 0) {
-        int corpse;
-        int status;
-        int childrenCount = 0;
+    int corpse;
+    int status;
+    int childrenCount = 0;
 
-        while ((corpse = waitpid(0, &status, 0)) > 0) {
-            childrenCount++;
-            //while (wait(&status) != pid);
-            if (status == 0) printf("myshell: processo %d finalizou normalmente com status %d.\n", corpse, status);
-            else {
-                char * signalDescription;
-                if (status == 1) signalDescription = "SIGHUP";
-                else if (status == 2) signalDescription = "SIGINT";
-                else if (status == 3) signalDescription = "SIGQUIT";
-                else if (status == 4) signalDescription = "SIGILL";
-                else if (status == 5) signalDescription = "SIGTRAP";
-                else if (status == 6) signalDescription = "SIGABRT";
-                else if (status == 7) signalDescription = "SIGEMT";
-                else if (status == 8) signalDescription = "SIGFPE";
-                else if (status == 9) signalDescription = "SIGKILL";
+    while ((corpse = waitpid(0, &status, 0)) > 0) {
+        childrenCount++;
+        //while (wait(&status) != pid);
+        if (status == 0) printf("myshell: processo %d finalizou normalmente com status %d.\n", corpse, status);
+        else {
+            char * signalDescription;
+            if (status == 1) signalDescription = "SIGHUP";
+            else if (status == 2) signalDescription = "SIGINT";
+            else if (status == 3) signalDescription = "SIGQUIT";
+            else if (status == 4) signalDescription = "SIGILL";
+            else if (status == 5) signalDescription = "SIGTRAP";
+            else if (status == 6) signalDescription = "SIGABRT";
+            else if (status == 7) signalDescription = "SIGEMT";
+            else if (status == 8) signalDescription = "SIGFPE";
+            else if (status == 9) signalDescription = "SIGKILL";
 
-                printf("myshell: processo %d finalizou de forma anormal com sinal %d: %s.\n", corpse, status, signalDescription);
-            }
+            printf("myshell: processo %d finalizou de forma anormal com sinal %d: %s.\n", corpse, status, signalDescription);
         }
-        if (childrenCount == 0) printf("myshell: não há processos restantes.\n");
-    } 
+    }
+    if (childrenCount == 0) printf("myshell: não há processos restantes.\n");
 }
 
 void commandWaitFor(char *argv[]){
     pid_t process;
-    if((fork() != 0)) {
-        //int process = argv[1];
-        int status;
-        int childrenCount = 0;
+    //int process = argv[1];
+    int status;
+    int childrenCount = 0;
 
-        while ((waitpid(process, &status, 0)) > 0) {
-            childrenCount++;
-            if (status == 0) printf("myshell: processo %d finalizou normalmente com status %d.\n", process, status);
-            else {
-                char * signalDescription;
-                if (status == 1) signalDescription = "SIGHUP";
-                else if (status == 2) signalDescription = "SIGINT";
-                else if (status == 3) signalDescription = "SIGQUIT";
-                else if (status == 4) signalDescription = "SIGILL";
-                else if (status == 5) signalDescription = "SIGTRAP";
-                else if (status == 6) signalDescription = "SIGABRT";
-                else if (status == 7) signalDescription = "SIGEMT";
-                else if (status == 8) signalDescription = "SIGFPE";
-                else if (status == 9) signalDescription = "SIGKILL";
-
-                printf("myshell: processo %d finalizou de forma anormal com sinal %d: %s..\n", process, status, signalDescription);
-            }
-        }
-        if (childrenCount == 0) printf("myshell: não há processos restantes.\n");
+    if (kill(process, 0) == -1) {
+        printf("processo inexistente ou sem permissão!\n");
+        return;
     }
+
+    while ((waitpid(process, &status, 0)) > 0) {
+        childrenCount++;
+        if (status == 0) printf("myshell: processo %d finalizou normalmente com status %d.\n", process, status);
+        else {
+            char * signalDescription;
+            if (status == 1) signalDescription = "SIGHUP";
+            else if (status == 2) signalDescription = "SIGINT";
+            else if (status == 3) signalDescription = "SIGQUIT";
+            else if (status == 4) signalDescription = "SIGILL";
+            else if (status == 5) signalDescription = "SIGTRAP";
+            else if (status == 6) signalDescription = "SIGABRT";
+            else if (status == 7) signalDescription = "SIGEMT";
+            else if (status == 8) signalDescription = "SIGFPE";
+            else if (status == 9) signalDescription = "SIGKILL";
+
+            printf("myshell: processo %d finalizou de forma anormal com sinal %d: %s..\n", process, status, signalDescription);
+        }
+    }
+    if (childrenCount == 0) printf("myshell: não há processos restantes.\n");
 }
 
 void commandChdir(char *path) {
